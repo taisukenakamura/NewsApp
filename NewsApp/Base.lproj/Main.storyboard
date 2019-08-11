@@ -64,6 +64,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="36" y="21"/>
         </scene>
         <!--News View Controller-->
         <scene sceneID="ssE-Pw-yqW">
@@ -72,9 +73,63 @@
                     <view key="view" contentMode="scaleToFill" id="QS0-LH-y8t">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <wkWebView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oao-Au-LEI">
+                                <rect key="frame" x="0.0" y="44" width="414" height="768"/>
+                                <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <wkWebViewConfiguration key="configuration">
+                                    <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
+                                    <wkPreferences key="preferences"/>
+                                </wkWebViewConfiguration>
+                            </wkWebView>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="asA-Ff-PtD">
+                                <rect key="frame" x="0.0" y="812" width="414" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="4vG-EB-aHL"/>
+                                </constraints>
+                                <items>
+                                    <barButtonItem systemItem="cancel" id="hnr-4g-JIs">
+                                        <connections>
+                                            <action selector="cancel:" destination="eQt-PA-2aQ" id="cAi-YM-wVO"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="2SZ-Wc-8V7"/>
+                                    <barButtonItem title="←" id="sCz-8G-FRT">
+                                        <connections>
+                                            <action selector="backPage:" destination="eQt-PA-2aQ" id="hZJ-hp-oWx"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="cCW-hY-aiO"/>
+                                    <barButtonItem title="→" id="76s-Ll-Cse">
+                                        <connections>
+                                            <action selector="nextPage:" destination="eQt-PA-2aQ" id="eWb-b0-Vfq"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="sOO-pk-NKg"/>
+                                    <barButtonItem systemItem="refresh" id="Voe-R7-k3r">
+                                        <connections>
+                                            <action selector="refreshPage:" destination="eQt-PA-2aQ" id="NhJ-dH-PZZ"/>
+                                        </connections>
+                                    </barButtonItem>
+                                </items>
+                            </toolbar>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="asA-Ff-PtD" firstAttribute="leading" secondItem="Ysv-UD-Iih" secondAttribute="leading" id="58R-VC-dco"/>
+                            <constraint firstItem="asA-Ff-PtD" firstAttribute="trailing" secondItem="Ysv-UD-Iih" secondAttribute="trailing" id="9pr-1f-Uff"/>
+                            <constraint firstItem="asA-Ff-PtD" firstAttribute="bottom" secondItem="Ysv-UD-Iih" secondAttribute="bottom" id="JMv-9o-fhx"/>
+                            <constraint firstItem="oao-Au-LEI" firstAttribute="leading" secondItem="Ysv-UD-Iih" secondAttribute="leading" id="NGa-ej-xoo"/>
+                            <constraint firstItem="asA-Ff-PtD" firstAttribute="top" secondItem="oao-Au-LEI" secondAttribute="bottom" id="NfG-07-Hdc"/>
+                            <constraint firstItem="oao-Au-LEI" firstAttribute="top" secondItem="Ysv-UD-Iih" secondAttribute="top" id="fDX-XF-AFi"/>
+                            <constraint firstItem="Ysv-UD-Iih" firstAttribute="trailing" secondItem="oao-Au-LEI" secondAttribute="trailing" id="zsw-uT-i2g"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="Ysv-UD-Iih"/>
                     </view>
+                    <connections>
+                        <outlet property="toolBar" destination="asA-Ff-PtD" id="mHq-g7-d73"/>
+                        <outlet property="webView" destination="oao-Au-LEI" id="5G9-Ei-DeJ"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qrI-vq-hU8" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
