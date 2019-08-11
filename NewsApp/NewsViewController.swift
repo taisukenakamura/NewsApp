@@ -17,16 +17,24 @@ class NewsViewController: UIViewController, IndicatorInfoProvider, UITableViewDa
     
     var parser: XMLParser = XMLParser()
     
-    //var articles = NSMutableArray()  →   変更
+    // var articles = NSMutableArray()  →   変更
     var articles : [Any] = []
+    // XMLファイルに解析をかけた情報で(object-c型)
+    var elements = NSMutableDictionary()
+    // XMLファイルのタグ情報
+    var element : String = ""
+    // XMLファイルのタイトル情報
+    var titleString : String = ""
+    // XMLファイルのリンク情報
+    var linkString : String = ""
     // webView
     @IBOutlet weak var webView: WKWebView!
     // toolBar(4つのボタンが入っている)
     @IBOutlet weak var toolBar: UIToolbar!
     
-    //urlを受け取る
+    // urlを受け取る
     var url : String = ""
-    //itemInfoを受け取る
+    // itemInfoを受け取る
     var itemInfo : IndicatorInfo = ""
     
     override func viewDidLoad() {
@@ -40,19 +48,69 @@ class NewsViewController: UIViewController, IndicatorInfoProvider, UITableViewDa
         webView.isHidden = true
         toolBar.isHidden = true
         
-        
+        parseUrl()
     }
-    
+    // urlを解析する
     func parseUrl() {
-        //String型で作成したURLをurl型に変更する
+        // String型で作成したURLをurl型に変更する
         let urlToSend: URL = URL(string: url)!
+        // パースの対象となるurlToSendを入れます
         parser = XMLParser(contentsOf: urlToSend)!
         //urlをparseする度に初期化する必要がある
         articles = []
-        // 解析の実行
+        // RSS解析の実行
         parser.parse()
         // TableViewのリロード
         tableView.reloadData()
+    }
+    // 解析中に要素の開始タグがあったときに実行されるメソッド。何度もデータを呼ぶので入ってくる度に元あるデータを初期化する必要がある
+    func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String] = [:]) {
+        // elementNameにタグの名前が入ってくるのでelementに代入
+        element = elementName
+        
+        //エレメントにタイトルにタイトルが入ってきたら
+        if element == "item" {
+            // 初期化
+            elements = [:]
+            titleString = ""
+            linkString = ""
+        }
+    }
+    // 開始タグと終了タグでくくられたデータがあったときに実行されるメソッド
+    func parser(_ parser: XMLParser, foundCharacters string: String) {
+        
+        if element == "title" {
+            
+            titleString.append(string)
+            
+        } else if element == "link" {
+            
+            linkString.append(string)
+            
+        }
+        
+    }
+    
+    func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
+        // アイテムという要素の中にあるなら
+        if elementName == "item" {
+            //titleString,linkStringの中身が空でないなら
+            if titleString != "" {
+                // elementsに"title","link"というキー値を付与しながらtitleString,linkStringをセット
+                elements.setObject(titleString, forKey: "title" as NSCopying)
+                
+            }
+            
+            if linkString != "" {
+                
+                elements.setObject(linkString, forKey: "link" as NSCopying)
+                
+            }
+            // articlesの中にelementsを入れる
+            articles.append(elements)
+            
+        }
+        
         
     }
     
