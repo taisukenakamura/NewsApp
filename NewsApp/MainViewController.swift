@@ -15,8 +15,9 @@ class MainViewController: ButtonBarPagerTabStripViewController {
                               "https://www.nhk.or.jp/rss/news/cat0.xml",
                               "http://shukan.bunshun.jp/list/feed/rss"]
     
+    
     // タブの名前の表示
-    var itemInfo : [IndicatorInfo] = []
+    var itemInfo : [IndicatorInfo] = ["Yahoo","NHK","週刊文春"]
 
     override func viewDidLoad() {
         super.viewDidLoad()
