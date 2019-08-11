@@ -42,8 +42,7 @@ class NewsViewController: UIViewController, IndicatorInfoProvider, UITableViewDa
         
         
         setTableView()
-        // デリゲートの接続
-        parser.delegate = self
+      
         // tableViewが表示されるのを邪魔しないように、最初は隠す
         webView.isHidden = true
         toolBar.isHidden = true
@@ -58,6 +57,8 @@ class NewsViewController: UIViewController, IndicatorInfoProvider, UITableViewDa
         parser = XMLParser(contentsOf: urlToSend)!
         //urlをparseする度に初期化する必要がある
         articles = []
+        // デリゲートの接続
+        parser.delegate = self
         // RSS解析の実行
         parser.parse()
         // TableViewのリロード
@@ -121,7 +122,7 @@ class NewsViewController: UIViewController, IndicatorInfoProvider, UITableViewDa
         // navigationDelegateとの接続
         webView.navigationDelegate = self
         //tableViewサイズの確定
-        tableView.frame = CGRect(x: 0, y: 50, width: self.view.frame.width, height: self.view.frame.height - 50)
+        tableView.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height)
         // ViewにtableViewを追加する
         self.view.addSubview(tableView)
     }
@@ -145,15 +146,26 @@ class NewsViewController: UIViewController, IndicatorInfoProvider, UITableViewDa
         cell.backgroundColor = #colorLiteral(red: 0.9678321481, green: 0.999337256, blue: 0.7441290617, alpha: 1)
         // 記事テキストサイズとフォント
         cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 15)
+        cell.textLabel?.text = (articles[indexPath.row] as AnyObject).value(forKey: "title") as? String
         cell.textLabel?.textColor = UIColor.black
         // 記事urlのサイズとフォント
         cell.detailTextLabel?.font = UIFont.systemFont(ofSize: 13.0)
+        cell.detailTextLabel?.text = (articles[indexPath.row] as AnyObject).value(forKey: "link") as? String
         cell.detailTextLabel?.textColor = UIColor.gray
         
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        let linkURL = ((articles[indexPath.row] as AnyObject).value(forKey: "link") as? String)?.trimmingCharacters(in: .whitespacesAndNewlines)
+         let urlStr = (linkURL?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed))!
+        guard let url = URL(string: urlStr) else {
+            return
+        }
+        let urlRequest = NSURLRequest(url: url)
+        webView.load(urlRequest as URLRequest)
+        
         
     }
     
